@@ -26,24 +26,30 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-        title: 'Social Prototype',
-        theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-            pageTransitionsTheme: const PageTransitionsTheme(builders: {
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-              TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            })),
-        darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.dark,
-        debugShowCheckedModeBanner: false,
-        supportedLocales: const [
-          Locale('en', ''),
-        ],
-        routerConfig: GoRouter(routes: [
+      title: 'Social Prototype',
+      theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+          pageTransitionsTheme: const PageTransitionsTheme(builders: {
+            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          })),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.dark,
+      debugShowCheckedModeBanner: false,
+      supportedLocales: const [
+        Locale('en', ''),
+      ],
+      routerConfig: GoRouter(
+        routes: [
           GoRoute(path: '/', builder: (context, state) => const InitScreen()),
           GoRoute(path: '/auth', builder: (context, state) => const AuthScreen()),
           GoRoute(path: '/home/:name', builder: (context, state) => HomeScreen.from(state.pathParameters['name'])),
-        ]));
+        ],
+        redirect: (context, state) {
+          return null;
+        },
+      ),
+    );
   }
 }
