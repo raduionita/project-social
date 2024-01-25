@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ExploreScreen extends StatelessWidget {
-  const ExploreScreen({super.key});
+class FavoritScreen extends StatelessWidget {
+  const FavoritScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,12 @@ class ExploreScreen extends StatelessWidget {
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text("explore")],
+      children: [
+        Text(
+          "stared",
+          style: TextStyle(color: Colors.white),
+        )
+      ],
     ));
   }
 }
