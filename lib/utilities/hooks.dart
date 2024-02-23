@@ -48,15 +48,6 @@ void useUnmount(VoidCallback callback) {
   return useEffectOnce(() => () => ref.value());
 }
 
-bool useInitialMount() {
-  final isInit = useRef(true);
-  if (isInit.value) {
-    isInit.value = false;
-    return true;
-  }
-  return isInit.value;
-}
-
 /// runs the future just once, and caches it
 /// ```dart
 /// final memorized = useMemorizedFuture(() { return Future...  });

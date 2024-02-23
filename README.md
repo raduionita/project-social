@@ -31,7 +31,7 @@
         + sender:  string  ("0001")
   + profile (user)
     + view
-    + query: SELECT * FROM users WHERE country = ? AND city = ? AND gender IN ['F','M'] AND birthyear IN ['1986'] and created > '20240116'
+    + query: SELECT * FROM users WHERE country = ? AND city = ? AND gender IN ['F','M'] AND birthyear IN [1986] and created > "20240116"
     + data (firestore: /users/8r6yfrXk1rF3HkaX1OB7)
       - bio: string
       - birthdate: string   (MMDD)
@@ -46,7 +46,7 @@
       - created: string     (YYMMDDHH=23123117) (year='23, 31th December at 17:00)
   + favorit (relations, likes)
     + view
-    + data (realtime: /relations)
+    + data (realtime: /matches)
       / relations
         / relationId (0001x0002) (id from user ids, smaller first)
           + created: string (YYYYMMDD)

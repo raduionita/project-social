@@ -1,68 +1,47 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/screens/home/explore.dart';
-import 'package:project_social/screens/home/chatter.dart';
-import 'package:project_social/screens/home/favorit.dart';
-import 'package:project_social/screens/home/swipper.dart';
+import 'package:go_router/go_router.dart';
 
-enum HomePage {
+enum FramePage {
   swipper,
   explore,
-  favorit,
-  chatter,
+  matched,
+  connect,
 }
 
-extension HomePageExtension on HomePage {
+extension FramePageExtension on FramePage {
   String get name => switch (this) {
-        HomePage.swipper => 'swipper',
-        HomePage.explore => 'explore',
-        HomePage.favorit => 'favorit',
-        HomePage.chatter => 'chatter',
+        FramePage.swipper => 'swipper',
+        FramePage.explore => 'explore',
+        FramePage.matched => 'matched',
+        FramePage.connect => 'connect',
       };
   int get index => switch (this) {
-        HomePage.swipper => 0,
-        HomePage.explore => 1,
-        HomePage.favorit => 2,
-        HomePage.chatter => 3,
+        FramePage.swipper => 0,
+        FramePage.explore => 1,
+        FramePage.matched => 2,
+        FramePage.connect => 3,
       };
 }
 
-class HomeScreen extends HookWidget {
-  static String routeName = '/home';
+class Frameful extends StatelessWidget {
+  const Frameful({super.key, required this.shell});
 
-  static const String swipper = 'swipper';
-  static const String explore = 'explore';
-  static const String favorit = 'favorit';
-  static const String chatter = 'chatter';
-  static const List<String> pages = ['swipper', 'explore', 'favorit', 'chatter'];
+  static const swipper = FramePage.swipper;
+  static const explore = FramePage.explore;
+  static const matched = FramePage.matched;
+  static const connect = FramePage.connect;
 
-  final HomePage page;
-
-  const HomeScreen(this.page, {super.key});
-
-  factory HomeScreen.from(String? page) => switch (page) {
-        HomeScreen.swipper => const HomeScreen(HomePage.swipper),
-        HomeScreen.explore => const HomeScreen(HomePage.explore),
-        HomeScreen.favorit => const HomeScreen(HomePage.favorit),
-        HomeScreen.chatter => const HomeScreen(HomePage.chatter),
-        _ => const HomeScreen(HomePage.swipper),
-      };
+  final StatefulNavigationShell shell;
 
   @override
   Widget build(BuildContext context) {
-    print('HomeScreen::build()');
-    print(ModalRoute.of(context)?.settings.arguments);
-
-    // state
-    final page = useState<int>(this.page.index);
+    print('Frame::build()');
     // content
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
           //toolbarHeight: kToolbarHeight,
-          title: const Text("home"),
+          title: Text(GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString()),
           centerTitle: false,
           titleSpacing: NavigationToolbar.kMiddleSpacing - (kToolbarHeight / 4),
           leading: Builder(
@@ -71,13 +50,15 @@ class HomeScreen extends HookWidget {
               padding: const EdgeInsets.all(1 + kToolbarHeight / 4),
               icon: const Icon(Icons.account_circle_outlined),
               onPressed: () {
-                print("HomeScreen::AppBar::leading::onPressed()");
+                print("Frame::AppBar::leading::onPressed()");
                 Scaffold.of(context).openDrawer();
               },
             ),
           ),
-          backgroundColor: Colors.transparent,
-          //forceMaterialTransparency: true,
+          backgroundColor: Theme.of(context).colorScheme.background, // keep the same as sufrace
+          surfaceTintColor: Theme.of(context).colorScheme.background, // keep the same as background
+          //shadowColor: Theme.of(context).colorScheme.inversePrimary,
+          forceMaterialTransparency: false,
           automaticallyImplyLeading: true,
           elevation: 0,
           actions: [
@@ -89,7 +70,7 @@ class HomeScreen extends HookWidget {
                 child: Icon(Icons.notifications_outlined),
               ),
               onPressed: () {
-                print("HomeScreen::AppBar::actions[0]::onPressed()");
+                print("Frame::AppBar::actions[0]::onPressed()");
                 showModalBottomSheet(
                     context: context,
                     backgroundColor: Theme.of(context).colorScheme.background,
@@ -110,7 +91,7 @@ class HomeScreen extends HookWidget {
       drawer: NavigationDrawer(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Theme.of(context).colorScheme.background,
-        onDestinationSelected: (value) => {print("HomeScreen::NavigationDrawer::onDestinationSelected() $value")},
+        onDestinationSelected: (value) => {print("Frame::NavigationDrawer::onDestinationSelected() $value")},
         elevation: 10,
         children: const [
           Padding(padding: EdgeInsets.fromLTRB(16, 16, 16, 16)),
@@ -121,15 +102,7 @@ class HomeScreen extends HookWidget {
       ),
       body: Container(
         color: Theme.of(context).colorScheme.background,
-        child: IndexedStack(
-          index: page.value,
-          children: const [
-            SwipperScreen(),
-            ExploreScreen(),
-            FavoritScreen(),
-            ChatterScreen(),
-          ],
-        ),
+        child: SafeArea(child: shell),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -140,7 +113,7 @@ class HomeScreen extends HookWidget {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.swipe_outlined),
-            label: 'swiper',
+            label: 'swipper',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.explore_outlined),
@@ -148,20 +121,34 @@ class HomeScreen extends HookWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.star_outline),
-            label: 'favorit',
+            label: 'matched',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_bubble_outline),
-            label: 'profile',
+            label: 'chatter',
           )
         ],
-        currentIndex: page.value,
+        currentIndex: shell.currentIndex,
         selectedIconTheme: const IconThemeData(color: Colors.redAccent, size: 32),
         unselectedIconTheme: const IconThemeData(color: Colors.white70, size: 32),
         onTap: (int index) {
-          page.value = index;
+          print("Frame::BottomNavigationBar::onTap() $index");
+          shell.goBranch(index); //, initialLocation: index == shell.currentIndex);
         },
       ),
+    );
+  }
+}
+
+class Frameless extends StatelessWidget {
+  const Frameless({super.key, required this.shell});
+
+  final StatefulNavigationShell shell;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(child: shell),
     );
   }
 }
