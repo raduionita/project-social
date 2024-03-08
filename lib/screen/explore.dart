@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/widgets/future_list.dart';
+import 'package:project_social/widget/future_list.dart';
 
 class ExploreScreen extends HookWidget {
   const ExploreScreen({super.key});

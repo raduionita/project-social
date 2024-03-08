@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BackButton;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:project_social/utilities/hooks.dart';
+import 'package:project_social/framework/hooks.dart';
+import 'package:project_social/widget/avatar_button.dart';
+import 'package:project_social/widget/custom_bar.dart';
 
 class Message {
   Message({required this.id, required this.body, required this.from, required this.seen});
@@ -14,9 +16,9 @@ class Message {
 }
 
 class ChatterScreen extends HookWidget {
-  const ChatterScreen({super.key, required this.other});
+  const ChatterScreen({super.key, required this.whom});
 
-  final String other;
+  final String whom;
 
   Stream<List<Message>> getMessages() async* {
     print('ChatterScreen::getMessages()');
@@ -24,9 +26,10 @@ class ChatterScreen extends HookWidget {
       yield await Future.delayed(const Duration(seconds: 1), () {
         print('ChatterScreen::getMessages() delayed $i');
         return [
-          Message(id: "${i.toString()}_01", body: "stream.stream.stream", from: "0002", seen: false),
-          Message(id: "${i.toString()}_02", body: "stream", from: "0001", seen: true),
-          Message(id: "${i.toString()}_03", body: "stream", from: "0002", seen: false),
+          Message(id: "${i.toString()}_01", body: "stream.stream.stream", from: "0001", seen: false),
+          Message(id: "${i.toString()}_02", body: "stream", from: "0002", seen: true),
+          Message(id: "${i.toString()}_03", body: "stream", from: "0002", seen: true),
+          Message(id: "${i.toString()}_04", body: "stream", from: "0001", seen: false),
         ];
       });
     }
@@ -37,7 +40,7 @@ class ChatterScreen extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('ChatterScreen::build()');
+    print('ChatterScreen::build($whom)');
 
     final items = useRef<List<Message>>([]);
     final controller = useRef<StreamController<List<Message>>>(StreamController());
@@ -47,15 +50,20 @@ class ChatterScreen extends HookWidget {
     final number = useState(0);
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: const Text('chatter'),
-        centerTitle: true,
-        leading: InkWell(
-          onTap: () => GoRouter.of(context).go('/connect'),
-          child: const Icon(Icons.arrow_back_outlined),
-        ),
-        actions: [ElevatedButton(onPressed: () => number.value++, child: Text('${number.value}'))],
+      appBar: CustomBar(
+        title: Text("chatter:$whom"),
+        buttons: [
+          CustomBack(onPressed: () => GoRouter.of(context).go('/connect')),
+          AvatarButton.network("https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=64", onPressed: () => GoRouter.of(context).push('/profile?whom=$whom')),
+        ],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert_outlined),
+            onPressed: () {
+              number.value++;
+            },
+          ),
+        ],
       ),
       extendBodyBehindAppBar: false,
       body: SafeArea(
@@ -139,3 +147,30 @@ class ChatterScreen extends HookWidget {
     );
   }
 }
+
+
+// AppBar(
+//         backgroundColor: Colors.black,
+//         titleSpacing: NavigationToolbar.kMiddleSpacing - (kToolbarHeight / 4),
+//         leading: Container(
+//           // color: Colors.grey,
+//           child: IconButton(
+//             // padding: const EdgeInsets.all(1 + kToolbarHeight / 4),
+//             onPressed: () => GoRouter.of(context).go('/connect'),
+//             icon: const Icon(Icons.arrow_back_ios_outlined),
+//           ),
+//         ),
+//         title: Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             IconButton(
+//               // padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+//               onPressed: () => {},
+//               icon: const Icon(Icons.account_circle_outlined),
+//             ),
+//             Text("/chatter:$whom"),
+//           ],
+//         ),
+
+//       ),

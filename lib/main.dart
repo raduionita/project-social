@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:project_social/widgets/frame.dart';
-import 'package:project_social/screens/explore.dart';
-import 'package:project_social/screens/matched.dart';
-import 'package:project_social/screens/profile.dart';
-import 'package:project_social/screens/swipper.dart';
-import 'package:project_social/screens/signing.dart';
-import 'package:project_social/screens/warning.dart';
-import 'package:project_social/screens/connect.dart';
-import 'package:project_social/screens/ingress.dart';
+import 'package:project_social/framework/session.dart';
+import 'package:project_social/screen/account.dart';
+import 'package:project_social/widget/frame.dart';
+import 'package:project_social/screen/explore.dart';
+import 'package:project_social/screen/matched.dart';
+import 'package:project_social/screen/profile.dart';
+import 'package:project_social/screen/swipper.dart';
+import 'package:project_social/screen/signing.dart';
+import 'package:project_social/screen/warning.dart';
+import 'package:project_social/screen/connect.dart';
+import 'package:project_social/screen/ingress.dart';
 import 'package:provider/provider.dart';
-import 'package:project_social/constants/environment.dart';
+import 'package:project_social/framework/environment.dart';
 
 void main() {
   // setup
@@ -34,7 +36,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        Provider<Environment>.value(value: Environment.work),
+        Provider(create: (context) => Environment.work),
+        //ChangeNotifierProvider(create: (context) => Manager()), // Manager : ChangeNotifier = service w/ dependency graph
+        ChangeNotifierProvider(create: (context) => Session()),
       ],
       child: const App(key: Key('App')),
     ),
@@ -58,15 +62,7 @@ class App extends StatelessWidget {
         builder: (context, state) => const SigningScreen(),
       ),
       StatefulShellRoute.indexedStack(
-        // builder: (context, state, shell) => state.uri.toString().contains('/connect?whom=') ? Frameless(shell: shell) : Frameful(shell: shell),
-        pageBuilder: (context, state, shell) => CustomTransitionPage(
-            key: state.pageKey,
-            transitionDuration: const Duration(seconds: 3),
-            child: state.uri.toString().contains('/connect?whom=') ? Frameless(shell: shell) : Frameful(shell: shell),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              print('StatefulShellRoute.pageBuilder.transitionsBuilder()');
-              return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation), child: child);
-            }),
+        builder: (context, state, shell) => state.uri.toString().contains('/connect?whom=') ? Frameless(shell: shell) : Frameful(shell: shell),
         branches: [
           StatefulShellBranch(routes: [
             GoRoute(
@@ -77,19 +73,7 @@ class App extends StatelessWidget {
           StatefulShellBranch(routes: [
             GoRoute(
               path: '/explore',
-              // builder: (context, state) => const ExploreScreen(),
-              pageBuilder: (context, state) {
-                print('GoRoute.pageBuilder()');
-                return CustomTransitionPage(
-                  key: state.pageKey,
-                  child: const ExploreScreen(),
-                  transitionDuration: const Duration(seconds: 3),
-                  transitionsBuilder: (context, animation, _, child) {
-                    print('GoRoute.pageBuilder.transitionsBuilder()');
-                    return SlideTransition(position: Tween(begin: const Offset(1, 0), end: Offset.zero).animate(animation), child: child);
-                  },
-                );
-              },
+              builder: (context, state) => const ExploreScreen(),
             ), // frame
           ]),
           StatefulShellBranch(routes: [
@@ -106,7 +90,8 @@ class App extends StatelessWidget {
           ]),
         ],
       ),
-      GoRoute(path: '/profile', builder: (context, state) => const ProfileScreen()),
+      GoRoute(path: '/account', builder: (context, state) => const AccountScreen()),
+      GoRoute(path: '/profile', builder: (context, state) => ProfileScreen(whom: state.uri.queryParameters['whom'])),
     ],
     // redirect: (context, state) {
     //   print('App::router::redirect ${state.fullPath}');

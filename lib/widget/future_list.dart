@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/utilities/hooks.dart';
+import 'package:project_social/framework/hooks.dart';
 
 class FutureList<T> extends HookWidget {
   const FutureList({super.key, required this.futureCaller, this.initialData, required this.itemBuilder, this.waitingBuilder, this.errorBuilder});

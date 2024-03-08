@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/utilities/animations.dart';
-import 'package:project_social/widgets/wrapper.dart';
+import 'package:project_social/framework/animations.dart';
+import 'package:project_social/widget/wrapper.dart';
 
 class SwipperScreen extends HookWidget {
   const SwipperScreen({super.key});
@@ -71,19 +71,31 @@ class SwipperScreen extends HookWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               ElevatedButton(
-                                child: const Icon(Icons.arrow_upward_outlined),
+                                style: offsetY.value < 0
+                                    ? ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.redAccent,
+                                      )
+                                    : null,
                                 onPressed: () async {
                                   await animateTo(offsetY, (height.value * 0.9) * -1, const Duration(milliseconds: 250));
                                   await animateToPage(paginator, paginator.page!.toInt() + 1, duration: const Duration(milliseconds: 250), curve: Curves.fastEaseInToSlowEaseOut);
                                 },
+                                child: const Icon(Icons.thumb_up_outlined),
                               ),
                               const Divider(),
                               ElevatedButton(
-                                child: const Icon(Icons.arrow_downward_outlined),
+                                style: offsetY.value > 0
+                                    ? ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        foregroundColor: Colors.redAccent,
+                                      )
+                                    : null,
                                 onPressed: () async {
                                   await animateTo(offsetY, (height.value * 0.9) * 1, const Duration(milliseconds: 250));
                                   await animateToPage(paginator, paginator.page!.toInt() + 1, duration: const Duration(milliseconds: 250), curve: Curves.fastEaseInToSlowEaseOut);
                                 },
+                                child: const Icon(Icons.thumb_down_outlined),
                               ),
                             ],
                           )
