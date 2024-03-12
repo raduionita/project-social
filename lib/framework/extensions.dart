@@ -54,16 +54,40 @@ extension StringReverse on String {
   }
 }
 
-/// pushAndRemoveUntil
-/// while (router.canPop())
-/// router.pop()
-/// router.pushReplacement(path)
 extension GoPushAndRemoveUntil on GoRouter {
+  /// pushAndRemoveUntil
+  /// while (router.canPop())
+  /// router.pop()
+  /// router.pushReplacement(path)
   void pushAndRemoveUntil(String location) {
-    inspect(this);
+    // inspect(this);
     while (canPop()) {
       pop();
     }
     go(location);
+  }
+}
+
+extension GoRouteStateDefaultOrNull on GoRouterState {
+  /// go to defaultPath if current path == router path \
+  /// otherwise route as normal \
+  /// (context, state) => state.defaultOrNull('/default')
+  String? defaultOrNull(String defaultPath) => fullPath == path ? defaultPath : null;
+}
+
+extension DateTimeToDateNull on DateTime? {
+  String toDate() {
+    if (this == null) return "0000-00-00";
+    final m = this!.month < 10 ? "0${this!.month}" : this!.month;
+    final d = this!.day < 10 ? "0${this!.day}" : this!.day;
+    return "${this!.year}-$m-$d";
+  }
+}
+
+extension DateTimeToDate on DateTime {
+  String toDate() {
+    final m = month < 10 ? "0$month" : month;
+    final d = day < 10 ? "0$day" : day;
+    return "$year-$m-$d";
   }
 }

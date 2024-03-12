@@ -45,7 +45,7 @@ class Frameful extends StatelessWidget {
         title: Text(GoRouter.of(context).routerDelegate.currentConfiguration.uri.toString()),
         buttons: [
           AvatarButton(
-            onPressed: () => GoRouter.of(context).push('/account'),
+            onPressed: () => GoRouter.of(context).push('/main/account'),
           ),
         ],
         actions: [

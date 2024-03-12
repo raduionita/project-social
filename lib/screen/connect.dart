@@ -30,7 +30,7 @@ class ConnectScreen extends HookWidget {
                 final curr = index.toString();
                 widgets.value.putIfAbsent(curr, () => ChatterScreen(whom: curr));
                 current.value = curr;
-                GoRouter.of(context).go('/connect?whom=$index');
+                GoRouter.of(context).go('/main/connect?whom=$index');
               },
               child: Text('to connect::$index'),
             ),

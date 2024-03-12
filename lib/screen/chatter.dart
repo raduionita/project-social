@@ -53,8 +53,8 @@ class ChatterScreen extends HookWidget {
       appBar: CustomBar(
         title: Text("chatter:$whom"),
         buttons: [
-          CustomBack(onPressed: () => GoRouter.of(context).go('/connect')),
-          AvatarButton.network("https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=64", onPressed: () => GoRouter.of(context).push('/profile?whom=$whom')),
+          CustomBack(onPressed: () => GoRouter.of(context).go('/main/connect')),
+          AvatarButton.network("https://ui-avatars.com/api/?background=0D8ABC&color=fff&size=64", onPressed: () => GoRouter.of(context).push('/main/profile?whom=$whom')),
         ],
         actions: [
           IconButton(
