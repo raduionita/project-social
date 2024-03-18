@@ -3,19 +3,23 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Future<Country?> showCountryPicker({required BuildContext context}) async {
+Future<Country?> showCountryPicker({required BuildContext context, String? title}) async {
   try {
-    final response = await rootBundle.loadString("data/countries.json");
+    final response = await rootBundle.loadString("asset/data/countries.json");
     final countries = await json.decode(response);
 
     return showDialog<Country?>(
+        barrierColor: Colors.black.withOpacity(0.9),
         // ignore: use_build_context_synchronously
         context: context,
         builder: (context) => Dialog(
-              insetPadding: const EdgeInsets.all(60),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: ListView.builder(
-                // shrinkWrap: true,
+            insetPadding: const EdgeInsets.all(60),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(children: [
+              Container(padding: const EdgeInsets.symmetric(vertical: 20), child: Text(title ?? "Select country")),
+              Expanded(
+                  child: ListView.builder(
+                shrinkWrap: true,
                 itemCount: countries.length,
                 itemBuilder: (context, i) => ListTile(
                   leading: Text(countries[i]["code"]),
@@ -24,8 +28,8 @@ Future<Country?> showCountryPicker({required BuildContext context}) async {
                     Navigator.of(context).pop(Country(name: countries[i]["name"], code: countries[i]["code"]));
                   },
                 ),
-              ),
-            ));
+              ))
+            ])));
   } catch (e) {
     return showDialog(
         // ignore: use_build_context_synchronously
@@ -44,6 +48,11 @@ class Country {
 
   String name;
   String code;
+}
+
+extension CountryExtension on Country? {
+  String get name => this == null ? "United States" : this!.name;
+  String get code => this == null ? "US" : this!.code;
 }
 
 /*

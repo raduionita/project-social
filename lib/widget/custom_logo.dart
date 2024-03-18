@@ -6,6 +6,6 @@ class CustomLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset('images/logo_black.png', width: kLogoWidth, height: kLogoHeight);
+    return Image.asset('asset/image/logo_black.jpg', width: kLogoWidth, height: kLogoHeight);
   }
 }

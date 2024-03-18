@@ -11,7 +11,7 @@ class SignInButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            fixedSize: const Size.fromWidth(240),
+            fixedSize: const Size.fromWidth(260),
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8)))),
         child: IntrinsicHeight(

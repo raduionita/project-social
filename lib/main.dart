@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_social/framework/extensions.dart';
 import 'package:project_social/framework/session.dart';
+import 'package:project_social/framework/theme.dart';
 import 'package:project_social/screen/account.dart';
 import 'package:project_social/widget/frame.dart';
 import 'package:project_social/screen/explore.dart';
@@ -18,23 +19,27 @@ import 'package:project_social/framework/environment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  // setup
-  WidgetsFlutterBinding.ensureInitialized();
-  // chrome
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  // error
-  // FlutterError.onError = (details) {
-  //   print("FlutterError.onError()");
-  //   FlutterError.dumpErrorToConsole(details);
-  //   runApp(MaterialApp(home: OupsScreen(details)));
-  // };
-  // ErrorWidget.builder = (details) {
-  //   print("ErrorWidget.builder()");
-  //   FlutterError.dumpErrorToConsole(details);
-  //   return MaterialApp(home: OupsScreen(details));
-  // };
-  // start
+  try {
+    // setup
+    WidgetsFlutterBinding.ensureInitialized();
+    // chrome
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    // error
+    // FlutterError.onError = (details) {
+    //   print("FlutterError.onError()");
+    //   FlutterError.dumpErrorToConsole(details);
+    //   runApp(MaterialApp(home: OupsScreen(details)));
+    // };
+    // ErrorWidget.builder = (details) {
+    //   print("ErrorWidget.builder()");
+    //   FlutterError.dumpErrorToConsole(details);
+    //   return MaterialApp(home: OupsScreen(details));
+    // };
+    // start
+  } catch (e) {
+    print(e.toString());
+  }
 
   final shared = await SharedPreferences.getInstance();
 
@@ -112,16 +117,10 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: router,
       title: 'Social Prototype',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData.dark().copyWith(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
-      supportedLocales: const [
-        Locale('en', ''),
-      ],
+      supportedLocales: const [Locale('en', '')],
     );
   }
 }

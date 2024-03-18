@@ -1,14 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:project_social/framework/assets.dart';
 import 'package:project_social/framework/environment.dart';
 import 'package:project_social/framework/extensions.dart';
 import 'package:project_social/framework/session.dart';
+import 'package:project_social/widget/birthdate_picker.dart';
 import 'package:project_social/widget/country_picker.dart';
 import 'package:project_social/widget/custom_logo.dart';
+import 'package:project_social/widget/gender_picker.dart';
+import 'package:project_social/widget/interests_picker.dart';
 import 'package:project_social/widget/signin_button.dart';
+import 'package:project_social/widget/wrapper.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -19,17 +22,17 @@ class SigningScreen extends HookWidget {
   Widget build(BuildContext context) {
     print('SigningScreen::build(${Provider.of<Environment>(context)})');
 
-    final controller = usePageController(initialPage: 0, keepPage: true);
+    final pager = usePageController(initialPage: 0, keepPage: true);
 
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
           child: PageView(
         physics: const NeverScrollableScrollPhysics(),
-        controller: controller,
+        controller: pager,
         children: [
-          SigningPage(onDone: () => controller.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.linear)),
-          DetailsPage(onDone: () => controller.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.linear)),
+          SigningPage(onDone: () => pager.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.linear)),
+          DetailsPage(onDone: () => pager.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.linear)),
         ],
       )),
     );
@@ -55,7 +58,7 @@ class SigningPage extends StatelessWidget {
                   Container(
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: SignInButton(
-                        icon: const Icon(Icons.login_outlined),
+                        icon: const Icon(IconFont.google, size: 16),
                         label: const Text("Sign-in with Google"),
                         onPressed: () async {
                           Session.of(context).clear();
@@ -67,8 +70,8 @@ class SigningPage extends StatelessWidget {
                   Container(
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: SignInButton(
-                        icon: const Icon(Icons.login_outlined),
-                        label: const Text(" Sign-in with Apple"),
+                        icon: const Icon(IconFont.apple, size: 18),
+                        label: const Text("Sign-in with Apple"),
                         onPressed: () {
                           // done
                           onDone!();
@@ -77,8 +80,8 @@ class SigningPage extends StatelessWidget {
                   Container(
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: SignInButton(
-                        icon: const Icon(Icons.login_outlined),
-                        label: const Text(" Sign-in with Facebook"),
+                        icon: const Icon(IconFont.facebook, size: 18),
+                        label: const Text("Sign-in with Facebook"),
                         onPressed: () {
                           // done
                           onDone!();
@@ -87,8 +90,8 @@ class SigningPage extends StatelessWidget {
                   Container(
                       margin: const EdgeInsets.symmetric(vertical: 12),
                       child: SignInButton(
-                        icon: const Icon(Icons.phone_enabled_outlined),
-                        label: const Text(" Sign-in with Phone"),
+                        icon: const Icon(Icons.phone_enabled_rounded, size: 19),
+                        label: const Text("Sign-in with Phone"),
                         onPressed: () {
                           // done
                           onDone!();
@@ -109,83 +112,201 @@ class DetailsPage extends HookWidget {
   Widget build(BuildContext context) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final now = DateTime.now();
-    final first = DateTime(1900);
     final last = DateTime(now.year - 18, now.month, now.day);
 
-    final name = useTextEditingController();
-    final birthDate = useTextEditingController();
-    final country = useTextEditingController();
-    final gender = useTextEditingController();
+    final pager = usePageController(initialPage: 4, keepPage: true);
 
-    return Column(
-      children: [
-        Form(
-          key: formKey,
-          child: Flex(
-            direction: Axis.vertical,
+    final name = useState("");
+    final birthdate = useState(last.toDate()); //..addListener(() => pager.animateToPage(2, duration: const Duration(milliseconds: 250), curve: Curves.linear));
+    final country = useState("");
+    final gender = useState("");
+    final interests = useState<List<String>>([]);
+
+    return Form(
+      key: formKey,
+      child: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pager,
+        children: [
+          // name
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  height: 80,
+              const Spacer(),
+              Flexible(
+                  flex: 6,
                   child: TextFormField(
-                    controller: name,
+                    initialValue: name.value,
+                    autofocus: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     keyboardType: TextInputType.name,
-                    decoration: const InputDecoration(hintText: "Enter your name"),
-                    onSaved: (value) => name.text = value ?? "",
-                    validator: (value) => value == null || value.isEmpty ? 'Name cannot be empty' : null,
+                    decoration: const InputDecoration(hintText: "Enter your name", helperText: ' ', border: InputBorder.none),
+                    validator: (value) => value == null || value.isEmpty ? 'Not a valid name' : null,
+                    textInputAction: TextInputAction.next,
+                    onChanged: (value) => name.value = value,
+                    onFieldSubmitted: (value) => print("name.onFieldSubmitted($value)"),
+                    onEditingComplete: () => name.value.isNotEmpty ? pager.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.linear) : null,
                   )),
-              const Divider(),
-              TextFormField(
-                controller: birthDate,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                keyboardType: TextInputType.none,
-                decoration: const InputDecoration(hintText: "Enter your birth date"),
-                onTap: () async => birthDate.text = (await showDatePicker(context: context, firstDate: first, lastDate: last, initialDatePickerMode: DatePickerMode.year)).toDate(),
-                validator: (value) => value == null || value.isEmpty || value == '0000-00-00' ? 'Birth date cannot be empty' : null,
-              ),
-              const Divider(),
-              Row(children: [
-                Flexible(
-                  child: TextFormField(
-                    controller: country,
+              Flexible(
+                  child: Visibility(
+                      visible: name.value.isNotEmpty,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 18),
+                          child:
+                              IconButton(onPressed: () => pager.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_next_outlined)))))
+            ],
+          )),
+
+          // birthday
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 18),
+                      child: IconButton(onPressed: () => pager.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_before_outlined)))),
+              Flexible(
+                flex: 6,
+                child: Wrapper(
+                  onBuild: () async => birthdate.value = (await showBirthDatePicker(context: context, initialDate: DateTime.parse(birthdate.value))).toDate(),
+                  builder: () => TextFormField(
+                    controller: TextEditingController(text: birthdate.value),
+                    readOnly: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     keyboardType: TextInputType.none,
-                    decoration: const InputDecoration(hintText: "Select your country"),
-                    onTap: () async => country.text = (await showCountryPicker(context: context))!.name,
-                    validator: (value) => value == null || value.isEmpty ? 'Country cannot be empty' : null,
+                    textAlign: TextAlign.center,
+                    decoration: const InputDecoration(hintText: "Enter your birth date", helperText: ' ', border: InputBorder.none),
+                    validator: (value) => value == null || value.isEmpty || value == '0000-00-00' ? 'Not a valid birth day' : null,
+                    onTap: () async => birthdate.value = (await showBirthDatePicker(context: context, initialDate: DateTime.parse(birthdate.value))).toDate(),
+                    onChanged: (value) => name.value = value,
+                    onFieldSubmitted: (value) => print("birthdate.onFieldSubmitted($value)"),
+                    //onEditingComplete: () => pager.animateToPage(2, duration: const Duration(milliseconds: 250), curve: Curves.linear),
                   ),
                 ),
-                const VerticalDivider(color: Colors.white),
-                Flexible(
-                    child: TextFormField(
-                  onTap: () {},
-                ))
-              ]),
-              const Divider(),
-              Row(children: [
-                DropdownMenu<String>(
-                    controller: gender,
-                    dropdownMenuEntries: const [
-                      DropdownMenuEntry<String>(value: "female", label: "female"),
-                      DropdownMenuEntry<String>(value: "male", label: "male"),
-                      DropdownMenuEntry<String>(value: "transgender", label: "transgender"),
-                      DropdownMenuEntry<String>(value: "other", label: "other"),
-                    ],
-                    onSelected: (value) => gender.text = value ?? "")
-              ]),
-              const Divider(),
-              ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                    }
-                    inspect(formKey.currentState);
-                  },
-                  child: const Text("submit"))
+              ),
+              Flexible(
+                  child: Visibility(
+                      visible: birthdate.value.length == "1900-01-01".length,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 18),
+                          child:
+                              IconButton(onPressed: () => pager.animateToPage(2, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_next_outlined)))))
             ],
-          ),
-        )
-      ],
+          )),
+
+          // country
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 18),
+                      child: IconButton(onPressed: () => pager.animateToPage(1, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_before_outlined)))),
+              Flexible(
+                  flex: 6,
+                  child: Wrapper(
+                    onBuild: () async => country.value = (await showCountryPicker(context: context)).name,
+                    builder: () => TextFormField(
+                      controller: TextEditingController(text: country.value),
+                      readOnly: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      keyboardType: TextInputType.none,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(hintText: "Select your country", helperText: ' ', border: InputBorder.none),
+                      validator: (value) => value == null || value.isEmpty ? 'Not a valid country' : null,
+                      onTap: () async => country.value = (await showCountryPicker(context: context)).name,
+                      onFieldSubmitted: (value) => print("country.onFieldSubmitted($value)"),
+                      // onEditingComplete: () => pager.animateToPage(3, duration: const Duration(milliseconds: 250), curve: Curves.linear),
+                    ),
+                  )),
+              Flexible(
+                  child: Visibility(
+                      visible: country.value.length > 1,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 18),
+                          child:
+                              IconButton(onPressed: () => pager.animateToPage(3, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_next_outlined)))))
+            ],
+          )),
+
+// TODO: city
+
+          // gender
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 18),
+                      child: IconButton(onPressed: () => pager.animateToPage(2, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_before_outlined)))),
+              Flexible(
+                  flex: 6,
+                  child: Wrapper(
+                    onBuild: () async => gender.value = (await showGenderPicker(context: context, title: "Select your gender")).name,
+                    builder: () => TextFormField(
+                      controller: TextEditingController(text: gender.value),
+                      readOnly: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      keyboardType: TextInputType.none,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(hintText: "Select your gender", helperText: ' ', border: InputBorder.none),
+                      validator: (value) => value == null || value.isEmpty ? 'Not a valid option' : null,
+                      onTap: () async => gender.value = (await showGenderPicker(context: context, title: "Select your gender")).name,
+                      onFieldSubmitted: (value) => print("gender.onFieldSubmitted($value)"),
+                      // onEditingComplete: () => pager.animateToPage(3, duration: const Duration(milliseconds: 250), curve: Curves.linear),
+                    ),
+                  )),
+              Flexible(
+                  child: Visibility(
+                      visible: gender.value.isNotEmpty,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 18),
+                          child:
+                              IconButton(onPressed: () => pager.animateToPage(4, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_next_outlined)))))
+            ],
+          )),
+
+          // interests
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                  child: Container(
+                      margin: const EdgeInsets.only(bottom: 18),
+                      child: IconButton(onPressed: () => pager.animateToPage(3, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.navigate_before_outlined)))),
+              Flexible(
+                  flex: 6,
+                  child: Wrapper(
+                    onBuild: () async => interests.value = (await showInterestsPicker(context: context, title: "Select your interests", inital: interests.value)) ?? [],
+                    builder: () => TextFormField(
+                      controller: TextEditingController(text: interests.value.join(", ")),
+                      maxLines: null,
+                      readOnly: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      keyboardType: TextInputType.none,
+                      textAlign: TextAlign.center,
+                      decoration: const InputDecoration(hintText: "Select some interests", helperText: ' ', border: InputBorder.none),
+                      validator: (value) => value == null || value.isEmpty ? 'Not a valid interest' : null,
+                      onTap: () async => interests.value = (await showInterestsPicker(context: context, title: "Select your interests", inital: interests.value)) ?? [],
+                      onFieldSubmitted: (value) => print("interests.onFieldSubmitted($value)"),
+                      // onEditingComplete: () => pager.animateToPage(3, duration: const Duration(milliseconds: 250), curve: Curves.linear),
+                    ),
+                  )),
+              Flexible(
+                  child: Visibility(
+                      visible: true,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 18),
+                          child: IconButton(onPressed: () => pager.animateToPage(0, duration: const Duration(milliseconds: 250), curve: Curves.linear), icon: const Icon(Icons.done)))))
+            ],
+          ))
+        ],
+      ),
     );
   }
 }

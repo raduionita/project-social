@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
@@ -77,7 +75,7 @@ extension GoRouteStateDefaultOrNull on GoRouterState {
 
 extension DateTimeToDateNull on DateTime? {
   String toDate() {
-    if (this == null) return "0000-00-00";
+    if (this == null) return "1900-01-01";
     final m = this!.month < 10 ? "0${this!.month}" : this!.month;
     final d = this!.day < 10 ? "0${this!.day}" : this!.day;
     return "${this!.year}-$m-$d";

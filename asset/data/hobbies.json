@@ -1,0 +1,246 @@
+[
+  {
+    "category": "physical",
+    "hobbies": [
+      "running",
+      "walking",
+      "yoga",
+      "pilates",
+      "tai chi",
+      "spinning",
+      "dance",
+      "badminton",
+      "volleyball",
+      "soccer",
+      "basketball",
+      "swimming",
+      "tennis",
+      "golf",
+      "ice skating",
+      "roller skating",
+      "bowling",
+      "skateboarding",
+      "kickboxing",
+      "ping-pong",
+      "baseball",
+      "archery",
+      "fitness"
+    ]
+  },
+  {
+    "category": "business",
+    "hobbies": [
+      "social media",
+      "advertising",
+      "architecture",
+      "sales",
+      "marketing",
+      "management",
+      "entrepreneurship",
+      "investing",
+      "design",
+      "finance",
+      "engineering",
+      "real estate",
+      "nursing"
+    ]
+  },
+  {
+    "category": "creative",
+    "hobbies": [
+      "sewing",
+      "drawing",
+      "painting",
+      "pottery",
+      "guitars",
+      "singing",
+      "calligraphy",
+      "candles",
+      "poetry",
+      "photography",
+      "journaling",
+      "jewelry",
+      "flowers",
+      "collaging",
+      "videography"
+    ]
+  },
+  {
+    "category": "intellectual",
+    "hobbies": [
+      "reading",
+      "museums",
+      "courses",
+      "blogging",
+      "podcasts",
+      "audiobooks",
+      "documentaries",
+      "science",
+      "astronomy"
+    ]
+  },
+  {
+    "category": "collecting",
+    "hobbies": [
+      "crystals",
+      "magnets",
+      "coins",
+      "memorabilia",
+      "souvenirs",
+      "seashells",
+      "vintage",
+      "books",
+      "houseplants",
+      "stamps",
+      "art"
+    ]
+  },
+  {
+    "category": "food & drink",
+    "hobbies": [
+      "cooking",
+      "baking",
+      "grilling",
+      "cookbooks",
+      "wine",
+      "beer",
+      "cocktails",
+      "coffee",
+      "tea",
+      "carnivore",
+      "vegan",
+      "vegetarian",
+      "pescetarian",
+      "raw-vegan"
+    ]
+  },
+  {
+    "category": "entertainment",
+    "hobbies": [
+      "card games",
+      "poker",
+      "video games",
+      "puzzles",
+      "chess",
+      "checkers",
+      "board games",
+      "darts",
+      "pool",
+      "gambling",
+      "ballet",
+      "movies",
+      "music",
+      "comics",
+      "mangas",
+      "tv shows",
+      "theatre",
+      "concerts",
+      "parties",
+      "festivals",
+      "literature"
+    ]
+  },
+  {
+    "category": "outdoor",
+    "hobbies": [
+      "hiking",
+      "trail walking",
+      "sightseeing",
+      "gardening",
+      "rock climbing",
+      "birdwatching",
+      "fishing",
+      "hunting",
+      "scuba diving",
+      "surfing",
+      "parasailing",
+      "sky diving",
+      "horseback riding",
+      "snowboarding",
+      "skiing",
+      "sledding",
+      "snowshoeing",
+      "rucking",
+      "star gazing",
+      "frisbee golf",
+      "kayaking"
+    ]
+  },
+  {
+    "category": "wellness",
+    "hobbies": [
+      "massage",
+      "baths",
+      "meditation",
+      "astrology",
+      "spas",
+      "skin care",
+      "makeup"
+    ]
+  },
+  {
+    "category": "fashion",
+    "hobbies": [
+      "clothing",
+      "shoes",
+      "coupons",
+      "jewelry",
+      "handbags",
+      "malls"
+    ]
+  },
+  {
+    "category": "pets",
+    "hobbies": [
+      "birds",
+      "cats",
+      "dogs",
+      "fish",
+      "horses",
+      "rabbits",
+      "reptiles"
+    ]
+  },
+  {
+    "category": "social",
+    "hobbies": [
+      "dating",
+      "family",
+      "charities",
+      "community",
+      "environmentalism",
+      "law",
+      "military",
+      "politics",
+      "religion",
+      "veterans",
+      "volunteering"
+    ]
+  },
+  {
+    "category": "vehicles",
+    "hobbies": [
+      "cars",
+      "boats",
+      "electric",
+      "hybrids",
+      "motorcycles",
+      "rvs",
+      "suvs",
+      "trucks"
+    ]
+  },
+  {
+    "category": "tech",
+    "hobbies": [
+      "computers",
+      "apple",
+      "pcs",
+      "linux",
+      "consoles",
+      "ps5",
+      "xbox",
+      "nintendo"
+    ]
+  }
+]

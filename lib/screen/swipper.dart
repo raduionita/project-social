@@ -31,7 +31,7 @@ class SwipperScreen extends HookWidget {
             //print('ListView::itemBuilder($listIndex)');
             return Wrapper(
               width: MediaQuery.of(context).size.width,
-              childBuilder: () {
+              builder: () {
                 final offsetY = useState(0.0);
                 final visible = useState<bool>(true);
                 final stoped = useState(false);
