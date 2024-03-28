@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
+import 'package:project_social/model/user.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,19 +10,29 @@ const String IS_AUTH = "isAuth";
 // ignore: constant_identifier_names
 const String IS_ONBOARD = "isOnboard";
 
-/// session = app-level context
 class Session extends ChangeNotifier {
+  // data
+  late bool isOnboard = false;
+  late bool isAuth = false;
+  late UserModel user;
+
   @protected
-  final SharedPreferences shared;
+  late SharedPreferences shared;
 
-  late bool isOnboard;
-  late bool isAuth;
-  // + Model user/profile
-  // + JSON config/settings
+  Session._internal();
 
-  Session({required this.shared})
-      : isOnboard = shared.getBool(IS_ONBOARD) ?? false,
-        isAuth = shared.getBool(IS_AUTH) ?? false;
+  factory Session() => instance;
+
+  static final instance = Session._internal();
+
+  static initialize() async {
+    instance.shared = await SharedPreferences.getInstance();
+
+    instance.isOnboard = instance.shared.getBool(IS_ONBOARD) ?? false;
+    instance.isAuth = instance.shared.getBool(IS_AUTH) ?? false;
+
+    UserModel.fromJson(jsonDecode(instance.shared.getString("user") ?? '{"id":"n/a"}'));
+  }
 
   static Session of(BuildContext context) {
     return Provider.of<Session>(context, listen: false);

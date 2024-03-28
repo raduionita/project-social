@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:project_social/framework/constants.dart';
+import 'package:project_social/app/constants.dart';
 
 class CustomLogo extends StatelessWidget {
   const CustomLogo({super.key});

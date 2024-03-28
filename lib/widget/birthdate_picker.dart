@@ -9,7 +9,7 @@ Future<DateTime?> showBirthDatePicker({required BuildContext context, DateTime? 
       confirmText: "done",
       helpText: "Enter your birth date",
       initialDate: initialDate,
-      firstDate: firstDate ?? DateTime(now.year - 100, now.month, now.day),
+      firstDate: firstDate ?? DateTime(1900, 01, 01), // DateTime(now.year - 100, now.month, now.day),
       lastDate: lastDate ?? DateTime(now.year - 18, now.month, now.day),
       initialEntryMode: DatePickerEntryMode.calendarOnly,
       initialDatePickerMode: DatePickerMode.year);

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:project_social/framework/extensions.dart';
+import 'package:project_social/app/extensions.dart';
 
 class MappedStack<K> extends StatelessWidget {
   /// key-value (`Map<String,Widget>`) `IndexedStack` \

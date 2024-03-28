@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/framework/hooks.dart';
 
-class FutureList<T> extends HookWidget {
-  const FutureList({super.key, required this.futureCaller, this.initialData, required this.itemBuilder, this.waitingBuilder, this.errorBuilder});
+class AsyncList<T> extends HookWidget {
+  const AsyncList({super.key, required this.future, this.initialData, required this.itemBuilder, this.waitingBuilder, this.errorBuilder, this.shrinkWrap = false});
 
-  final Future<List<T>> Function() futureCaller;
+  final Future<List<T>> future;
   final List<T>? initialData;
   final Widget Function(BuildContext context, int index, T? item) itemBuilder;
   final Widget Function(BuildContext context)? waitingBuilder;
   final Widget Function(BuildContext context)? errorBuilder;
+  final bool shrinkWrap;
 
   @override
   Widget build(BuildContext context) {
     print('FutureList::build()');
-    final memorized = useMemorizedFuture(this.futureCaller);
     return FutureBuilder<List<T>>(
       key: key,
       initialData: this.initialData,
-      future: memorized,
+      future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return this.waitingBuilder != null ? this.waitingBuilder!(context) : const Center(child: CircularProgressIndicator());
@@ -28,7 +27,7 @@ class FutureList<T> extends HookWidget {
           } else if (snapshot.hasData) {
             // final list = snapshot.data?.toList();
             return ListView.builder(
-              shrinkWrap: true,
+              shrinkWrap: shrinkWrap,
               //itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
                 if (index < snapshot.data!.length) {

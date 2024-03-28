@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart' hide BackButton;
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:project_social/framework/hooks.dart';
+import 'package:project_social/app/hooks.dart';
 import 'package:project_social/widget/avatar_button.dart';
 import 'package:project_social/widget/custom_bar.dart';
 

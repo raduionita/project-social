@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:project_social/framework/extensions.dart';
-import 'package:project_social/framework/hooks.dart';
-import 'package:project_social/framework/session.dart';
+import 'package:project_social/app/extensions.dart';
+import 'package:project_social/app/hooks.dart';
+import 'package:project_social/app/session.dart';
 import 'package:project_social/widget/custom_logo.dart';
 import 'package:project_social/widget/widget_toggle.dart';
 

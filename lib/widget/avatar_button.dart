@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class AvatarButton extends StatelessWidget {
@@ -10,12 +11,12 @@ class AvatarButton extends StatelessWidget {
       : icon = CircleAvatar(
             // backgroundColor: Colors.transparent,
             radius: 18,
-            backgroundImage: Image.network(
+            backgroundImage: CachedNetworkImageProvider(
               src,
-              fit: BoxFit.cover,
-              width: 16,
-              height: 16,
-            ).image);
+              // fit: BoxFit.cover,
+              maxWidth: 16,
+              maxHeight: 16,
+            ));
 
   @override
   Widget build(BuildContext context) {

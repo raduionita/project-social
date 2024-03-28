@@ -1,4 +1,4 @@
-import 'package:project_social/framework/extensions.dart';
+import 'package:project_social/app/extensions.dart';
 
 //const String _base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const String _base62Rand = "Up0DNILisgVjfzydHR2vCJt69FeS3uhQGm7x5EnKWl1broqXw8akA4YTOZPMBc";

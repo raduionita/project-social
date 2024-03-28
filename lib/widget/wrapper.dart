@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/framework/hooks.dart';
+import 'package:project_social/app/hooks.dart';
 
 typedef WrapperOnBuildCallback = void Function();
 typedef WrapperChildBuilderCallback = Widget Function();

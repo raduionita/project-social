@@ -32,7 +32,7 @@ Future<Gender?> showGenderPicker({required BuildContext context, String? title})
         barrierColor: Colors.black.withOpacity(0.9),
         context: context,
         builder: (context) => Dialog(
-            insetPadding: const EdgeInsets.symmetric(vertical: 200, horizontal: 120),
+            insetPadding: const EdgeInsets.symmetric(vertical: 200, horizontal: 80),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: Column(children: [
               Container(padding: const EdgeInsets.symmetric(vertical: 20), child: Text(title ?? "Select gender")),

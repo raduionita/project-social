@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_social/widget/mapped_stack.dart';
 import 'package:project_social/screen/chatter.dart';
@@ -24,18 +25,22 @@ class ConnectScreen extends HookWidget {
           child: ListView.builder(
             shrinkWrap: true,
             itemCount: 10,
-            itemBuilder: (context, index) => ElevatedButton(
-              onPressed: () {
-                print('ConnectScreen.ListView.ElevatedButton.onPressed($index)');
-                final curr = index.toString();
-                widgets.value.putIfAbsent(curr, () => ChatterScreen(whom: curr));
-                current.value = curr;
-                GoRouter.of(context).go('/main/connect?whom=$index');
-              },
-              child: Text('to connect::$index'),
-            ),
+            itemBuilder: (context, index) => Slidable(
+                startActionPane: ActionPane(motion: const ScrollMotion(), dismissible: DismissiblePane(onDismissed: () => {}), children: [
+                  SlidableAction(
+                    onPressed: (context) {
+                      print('ConnectScreen.ListView.ElevatedButton.onPressed($index)');
+                      final curr = index.toString();
+                      widgets.value.putIfAbsent(curr, () => ChatterScreen(whom: curr));
+                      current.value = curr;
+                      GoRouter.of(context).go('/main/connect?whom=$index');
+                    },
+                  )
+                ]),
+                child: ListTile(title: Text('to connect::$index'))),
           ),
         ),
+
         // chat view
         MappedStack(
           active: current.value,

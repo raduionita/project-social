@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/widget/future_list.dart';
+import 'package:project_social/widget/async_list.dart';
 
 class ExploreScreen extends HookWidget {
   const ExploreScreen({super.key});
@@ -29,8 +29,8 @@ class ExploreScreen extends HookWidget {
         // row 0
         const Center(child: Text("explore", style: TextStyle(color: Colors.white))),
         // row 1
-        FutureList(
-          futureCaller: getStringList,
+        AsyncList(
+          future: getStringList(),
           itemBuilder: (context, index, item) {
             return Text(item!);
           },

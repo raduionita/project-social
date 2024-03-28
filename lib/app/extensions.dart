@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
@@ -88,4 +89,14 @@ extension DateTimeToDate on DateTime {
     final d = day < 10 ? "0$day" : day;
     return "$year-$m-$d";
   }
+}
+
+extension FirebaseReferenceListAllReferences on Reference {
+  Future<List<Reference>> listAllReferences() async {
+    return (await listAll()).items;
+  }
+}
+
+extension StringInsert on String {
+  String insert(int index, String what) => replaceRange(index, index, what);
 }

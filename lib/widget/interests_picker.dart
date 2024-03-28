@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:project_social/framework/hooks.dart';
+import 'package:project_social/app/hooks.dart';
 
 typedef HobbyItem = String;
 typedef HobbyList = List<HobbyItem>;
@@ -29,11 +31,10 @@ Future<HobbyList?> showInterestsPicker({required BuildContext context, String? t
         barrierColor: Colors.black.withOpacity(0.9),
         context: context,
         builder: (context) => HookBuilder(builder: (context) {
-              print("HookBuilder");
               final hobbies = useSet<HobbyItem>({...inital ?? []});
               return Dialog(
                   backgroundColor: Theme.of(context).dialogBackgroundColor,
-                  insetPadding: const EdgeInsets.symmetric(vertical: 64, horizontal: 64),
+                  insetPadding: const EdgeInsets.symmetric(vertical: 56, horizontal: 56),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   child: FutureBuilder(
                       future: future,
@@ -41,17 +42,9 @@ Future<HobbyList?> showInterestsPicker({required BuildContext context, String? t
                           ? const Center(child: CircularProgressIndicator())
                           : Column(children: [
                               Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                                    const Spacer(),
-                                    Flexible(flex: 4, child: Text(title ?? "Select interests", textAlign: TextAlign.center)),
-                                    Flexible(
-                                        flex: 1,
-                                        child: TextButton(
-                                          onPressed: () => Navigator.of(context).pop(hobbies.toList()),
-                                          child: const Text("done"),
-                                        )),
-                                  ])),
+                                padding: const EdgeInsets.symmetric(vertical: 18),
+                                child: Text(title ?? "Select interests", textAlign: TextAlign.center),
+                              ),
                               Expanded(
                                   child: Container(
                                 padding: const EdgeInsets.only(left: 8, bottom: 8, right: 8),
@@ -73,6 +66,14 @@ Future<HobbyList?> showInterestsPicker({required BuildContext context, String? t
                                       .toList(),
                                 )),
                               )),
+                              Container(
+                                padding: const EdgeInsets.only(right: 12, bottom: 4),
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () => Navigator.of(context).pop(hobbies.toList()),
+                                  child: const Text("done"),
+                                ),
+                              ),
                             ])));
             }));
   } catch (e) {
